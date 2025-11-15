@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package clients;
+
+service ClientService {
+  rpc CreateClient (CreateClientRequest) returns (ClientResponse);
+  rpc GetAllClients (GetAllClientsRequest) returns (ClientListResponse);
+  rpc GetClientById (GetClientByIdRequest) returns (ClientResponse);
+  rpc UpdateClient (UpdateClientRequest) returns (ClientResponse);
+  rpc UpdatePassword (UpdatePasswordRequest) returns (MessageResponse);
+  rpc DeleteClient (DeleteClientRequest) returns (MessageResponse);
+}
+
+message CreateClientRequest {
+  string firstName = 1;
+  string lastName = 2;
+  string email = 3;
+  string username = 4;
+  string password = 5;
+  string birthDate = 6;
+  string address = 7;
+  string phone = 8;
+}
+
+message GetAllClientsRequest {
+  string name = 1;
+  string email = 2;
+  string username = 3;
+  string isActive = 4;
+}
+
+message GetClientByIdRequest {
+  string id = 1;
+  bool includePassword = 2;
+}
+
+message UpdateClientRequest {
+  string id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string email = 4;
+  string username = 5;
+  string birthDate = 6;
+  string address = 7;
+  string phone = 8;
+}
+
+message UpdatePasswordRequest {
+  string id = 1;
+  string password = 2;
+}
+
+message DeleteClientRequest {
+  string id = 1;
+}
+
+message ClientResponse {
+  string id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string email = 4;
+  string username = 5;
+  string password = 6;
+  string birthDate = 7;
+  string address = 8;
+  string phone = 9;
+  string role = 10;
+  bool isActive = 11;
+  string createdAt = 12;
+  string updatedAt = 13;
+  string message = 14;
+}
+
+message ClientListResponse {
+  int32 count = 1;
+  repeated ClientResponse clients = 2;
+}
+
+message MessageResponse {
+  string message = 1;
+}
