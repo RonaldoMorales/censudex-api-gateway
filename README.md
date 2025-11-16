@@ -62,12 +62,14 @@ pip install -r requirements.txt
 
 ### 5. Configurar variables de entorno
 
-Crea un archivo `.env` en la raíz del proyecto:
+Crea un archivo `.env` en la raíz del proyecto (Los localhost pueden variar depeniendo de los .env de los distintos repositorios):
 
-```env
+```env (EJEMPLO)
 PORT=3000
 AUTH_SERVICE_URL=http://localhost:3002/api/auth
 CLIENTS_SERVICE_URL=http://localhost:3001/api/clients
+PRODUCTS_SERVICE_URL=http://localhost:3002/api/products
+ORDERS_SERVICE_URL=http://localhost:3003/api/orders
 CLIENTS_GRPC_HOST=localhost
 CLIENTS_GRPC_PORT=50051
 PRODUCTS_GRPC_HOST=localhost
