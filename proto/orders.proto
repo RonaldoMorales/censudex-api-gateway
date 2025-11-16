@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+// Importar el tipo de dato Timestamp estándar de Google para manejo de fechas/horas
+import "google/protobuf/timestamp.proto";
+
+// Definir el package
+package orders;
+
+// Definición del servicio gRPC
+service OrderManager {
+    // 1. Crear Pedidos (Crear)
+    rpc CreateOrder (CreateOrderRequest) returns (OrderResponse);
+
+    // 2. Consultar Historial con Filtros (Listar)
+    rpc GetOrders (GetOrdersRequest) returns (OrderListResponse);
+
+    // 3. Consultar Estado de Pedido (por ID)
+    rpc GetOrderById (GetOrderByIdRequest) returns (OrderResponse);
+
+    // 4. Actualizar Estado de Pedido (Actualizar)
+    rpc UpdateOrderStatus (UpdateStatusRequest) returns (OrderResponse);
+
+    // 5. Cancelar Pedido (Eliminar/Cancelar)
+    rpc DeleteOrder (DeleteOrderRequest) returns (MessageResponse);
+}
+
+// =================================================================
+// MENSAJES DE SOLICITUD (REQUESTS)
+// =================================================================
+
+// Solicitud para crear un nuevo pedido
+message CreateOrderRequest {
+    int32 user_id = 1;
+    string delivery_address = 2;
+    repeated OrderItemRequest items_to_create = 3;
+}
+
+// Item del pedido (usado solo en la solicitud de creación)
+message OrderItemRequest {
+    int32 product_id = 1;
+    int32 quantity = 2;
+}
+
+// Solicitud para consultar órdenes con filtros
+message GetOrdersRequest {
+    int32 order_id = 1;
+    int32 user_id = 2;
+    google.protobuf.Timestamp start_date = 3; // Filtrar por rango de fecha de creación
+    google.protobuf.Timestamp end_date = 4;
+    string current_status = 5; // Filtrar por estado (PENDIENTE, ENVIADO, etc.)
+}
+
+// Solicitud para obtener un pedido por ID
+message GetOrderByIdRequest {
+    int32 id = 1;
+}
+
+// Solicitud para actualizar el estado de un pedido
+message UpdateStatusRequest {
+    int32 id = 1;
+    string new_status = 2; // El nuevo estado
+    string tracking_number = 3; // Se usa si el estado cambia a "ENVIADO"
+}
+
+// Solicitud para cancelar/eliminar un pedido
+message DeleteOrderRequest {
+    int32 id = 1;
+    string cancellation_reason = 2; // Motivo de la cancelación
+}
+
+// =================================================================
+// MENSAJES DE RESPUESTA (RESPONSES)
+// =================================================================
+
+// Estructura de un item de pedido para la respuesta
+message OrderItemResponse {
+    int32 item_id = 1;
+    int32 order_id = 2;
+    int32 product_id = 3;
+    int32 quantity = 4;
+    double price_at_purchase = 5;
+}
+
+// Estructura de respuesta de un único pedido
+message OrderResponse {
+    int32 id = 1;
+    int32 user_id = 2;
+    google.protobuf.Timestamp order_date = 3;
+    string delivery_address = 4;
+    double total_amount = 5;
+    string current_status = 6;
+    string tracking_number = 7;
+    string cancellation_reason = 8;
+    
+    repeated OrderItemResponse items = 9;
+    
+    // Campos comunes de respuesta
+    string message = 10;
+    string created_at = 11; // Usamos string para metadatos si no son el campo principal
+    string updated_at = 12;
+}
+
+// Estructura para la lista de pedidos
+message OrderListResponse {
+    int32 count = 1;
+    repeated OrderResponse orders = 2;
+}
+
+// Mensaje de respuesta simple (igual que en clients.proto)
+message MessageResponse {
+    string message = 1;
+}
