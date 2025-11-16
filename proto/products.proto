@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package products;
+
+// Servicio principal de productos
+service ProductService {
+  rpc GetAllProducts (GetAllProductsRequest) returns (ProductListResponse);
+  rpc GetProductById (GetProductByIdRequest) returns (ProductResponse);
+  rpc CreateProduct (CreateProductRequest) returns (ProductResponse);
+  rpc UpdateProduct (UpdateProductRequest) returns (ProductResponse);
+  rpc DeleteProduct (DeleteProductRequest) returns (DeleteProductResponse);
+}
+
+// ===== MENSAJES DE SOLICITUD =====
+
+message GetAllProductsRequest {
+  // Vacío por ahora, puedes agregar filtros después
+}
+
+message GetProductByIdRequest {
+  string id = 1;
+}
+
+message CreateProductRequest {
+  string name = 1;
+  string category = 2;
+  double price = 3;
+  string imageUrl = 4;
+}
+
+message UpdateProductRequest {
+  string id = 1;
+  string name = 2;
+  string category = 3;
+  double price = 4;
+  string imageUrl = 5;
+}
+
+message DeleteProductRequest {
+  string id = 1;
+}
+
+// ===== MENSAJES DE RESPUESTA =====
+
+message ProductResponse {
+  bool success = 1;
+  string message = 2;
+  Product product = 3;
+}
+
+message ProductListResponse {
+  bool success = 1;
+  string message = 2;
+  int32 count = 3;
+  repeated Product products = 4;
+}
+
+message DeleteProductResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// ===== MODELO DE PRODUCTO =====
+
+message Product {
+  string id = 1;
+  string name = 2;
+  string category = 3;
+  double price = 4;
+  string imageUrl = 5;
+  string imagePublicId = 6;
+  bool isActive = 7;
+  string dateCreated = 8;
+}
